@@ -55,8 +55,7 @@ class Annotator:
             if int(class_id) in self.object_classes.keys():
                 box = box.cpu()
                 left, top, right, bottom = box.numpy()
-                log_file.write(image_name + ',' + self.object_classes[int(class_id)] + ',' + str(left) + ',' + str(
-                    top) + ',' + str(right) + ',' + str(bottom) + '\n')
+                log_file.write(image_name + ',' + self.object_classes[int(class_id)] + ',' + str(box) + '\n')
         log_file.close()
 
     @staticmethod
