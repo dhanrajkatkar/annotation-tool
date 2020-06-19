@@ -4,8 +4,10 @@ import cv2
 
 class F1Score:
     def __init__(self):
-        pass
-
+        self.TP = 0
+        self.FP = 0
+        self.FN = 0
+    @staticmethod
     def get_max_iou(pred_boxes, gt_box):
         # 1. calculate the inters coordinate
         if pred_boxes.shape[0] > 0:
@@ -29,38 +31,36 @@ class F1Score:
             nmax = np.argmax(iou)
             return iou, iou_max, nmax
 
-    @staticmethod
-    def calculate_score(TP, FP, FN):
-        precision = TP / (TP + FP)
-        recall = TP / (TP + FN)
+    def calculate_score(self):
+        precision = self.TP / (self.TP + self.FP)
+        recall = self.TP / (self.TP + self.FN)
         f1_score = (2 * precision * recall) / (precision + recall)
+        return precision, recall, f1_score
 
-    @staticmethod
-    def confusion_matrix(self):
+    def confusion_matrix(self, gt_boxes, pred_boxes):
+        if len(pred_boxes) < len(gt_boxes):
+            self.FN += len(gt_boxes) - len(pred_boxes)
+        for box in pred_boxes:
+            iou, iou_max, nmax = f1.get_max_iou(pred_boxes, box)
+            if iou_max > .5:
+                self.TP += 1
+            else:
+                self.FP += 1
+        print('TP = ', self.TP, 'FP =', self.FP, 'FN =', self.FN)
+
 
 if __name__ == '__main__':
     f1 = F1Score()
-    dir_root = '/home/webwerks/PycharmProjects/annotation-tool/coco_data'
-    gt = Detector(dir_root, 0.5)
-    pred = Detector(dir_root, 0.7)
+    dir_root = '/home/webwerks/Pycf1f1harmProjects/annotation-tool/coco_data'
+    gt = Detector(0.5)
+    pred = Detector(0.7)
     images = gt.read_images(dir_root)
-    boxes = []
-    TP = 0
-    FP = 0
-    FN = 0
     for image_name in images:
         image = dir_root + '/' + image_name
         # get image
         im = cv2.imread(image)
         gt_boxes = gt.pred(im)
         pred_boxes = pred.pred(im)
-        if len(pred_boxes) < len(gt_boxes):
-            FN += len(gt_boxes) - len(pred_boxes)
-        for box in pred_boxes:
-            iou, iou_max, nmax = f1.get_max_iou(pred_boxes, box)
-            if iou_max > .5:
-                TP += 1
-            else:
-                FP += 1
-
-    print('TP = ', TP, 'FP =', FP, 'FN =', FN)
+        f1.confusion_matrix(gt_boxes, pred_boxes)
+    precision, recall, f1_score = f1.calculate_score()
+    print(precision, recall, f1_score)

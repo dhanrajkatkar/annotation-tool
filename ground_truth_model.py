@@ -6,7 +6,7 @@ import numpy as np
 
 
 class Detector:
-    def __init__(self, directory_root, thresh):
+    def __init__(self, thresh):
         self.object_classes = {0: 'Person'}
         # Create config
         cfg = get_cfg()
@@ -15,9 +15,6 @@ class Detector:
         cfg.MODEL.WEIGHTS = "model_final_f6e8b1.pkl"
         # Create predictor
         self.predictor = DefaultPredictor(cfg)
-        self.root_directory = directory_root
-        # Reading dataset
-        # self.dataset = self.read_images(directory_root)
 
     def pred(self, im):
         boxes = []
