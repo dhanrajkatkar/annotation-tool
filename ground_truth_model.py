@@ -53,39 +53,4 @@ class Detector:
         except Exception as e:
             print(f"Error : {e}")
 
-#
-# if __name__ == '__main__':
-#     from f1_score import get_max_iou
-#
-#     dir_root = '/home/webwerks/PycharmProjects/annotation-tool/coco_data'
-#     gt = Detector(dir_root, 0.5)
-#     pred = Detector(dir_root, 0.7)
-#
-#     images = gt.read_images(dir_root)
-#     boxes = []
-#     TP = 0
-#     FP = 0
-#     FN = 0
-#     for image_name in images:
-#         image = dir_root + '/' + image_name
-#         # get image
-#         im = cv2.imread(image)
-#         gt_boxes = gt.pred(im)
-#         pred_boxes = pred.pred(im)
-#         if len(pred_boxes) < len(gt_boxes):
-#             FN += len(gt_boxes) - len(pred_boxes)
-#         for box in pred_boxes:
-#             iou, iou_max, nmax = get_max_iou(pred_boxes, box)
-#             if iou_max > .5:
-#                 TP += 1
-#             else:
-#                 FP += 1
-#
-#     print('TP = ', TP, 'FP =', FP, 'FN =', FN)
-#
-#     precision = TP/(TP+FP)
-#     print('precision = ', precision)
-#     recall = TP/(TP+FN)
-#     print('recall = ', recall)
-#     f1_score = (2*precision*recall)/(precision+recall)
-#
+

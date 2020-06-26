@@ -63,4 +63,4 @@ if __name__ == '__main__':
         pred_boxes = pred.pred(im)
         f1.confusion_matrix(gt_boxes, pred_boxes)
     precision, recall, f1_score = f1.calculate_score()
-    print(precision, recall, f1_score)
+    print(precision, recall, f1_score)  
