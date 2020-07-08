@@ -1,12 +1,14 @@
 import numpy as np
 from ground_truth_model import Detector
 import cv2
+from persons import SsdModel
 
 class F1Score:
     def __init__(self):
         self.TP = 0
         self.FP = 0
         self.FN = 0
+
     @staticmethod
     def get_max_iou(pred_boxes, gt_box):
         # 1. calculate the inters coordinate
@@ -39,9 +41,11 @@ class F1Score:
 
     def confusion_matrix(self, gt_boxes, pred_boxes):
         if len(pred_boxes) < len(gt_boxes):
+            print(len(pred_boxes), len(gt_boxes))
             self.FN += len(gt_boxes) - len(pred_boxes)
         for box in pred_boxes:
-            iou, iou_max, nmax = f1.get_max_iou(pred_boxes, box)
+            iou, iou_max, nmax = f1.get_max_iou(gt_boxes, box)
+            # print(iou_max)
             if iou_max > .5:
                 self.TP += 1
             else:
@@ -51,16 +55,18 @@ class F1Score:
 
 if __name__ == '__main__':
     f1 = F1Score()
-    dir_root = '/home/webwerks/Pycf1f1harmProjects/annotation-tool/coco_data'
+    dir_root = '/home/webwerks/PycharmProjects/annotation-tool/coco_data'
     gt = Detector(0.5)
-    pred = Detector(0.7)
+    # pred = Detector(0.7)
+    pred = SsdModel()
+
     images = gt.read_images(dir_root)
     for image_name in images:
         image = dir_root + '/' + image_name
         # get image
         im = cv2.imread(image)
         gt_boxes = gt.pred(im)
-        pred_boxes = pred.pred(im)
+        pred_boxes = pred.make_predict(im)
         f1.confusion_matrix(gt_boxes, pred_boxes)
     precision, recall, f1_score = f1.calculate_score()
-    print(precision, recall, f1_score)  
+    print(precision, recall, f1_score)
