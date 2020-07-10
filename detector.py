@@ -5,6 +5,7 @@ from detectron2.data import MetadataCatalog
 import cv2
 from os import listdir
 from datetime import datetime
+import argparse
 
 
 class Annotator:
@@ -79,6 +80,5 @@ if __name__ == '__main__':
     parser.add_argument('--dir', type=str, default="/home/webwerks/PycharmProjects/annotator/coco_data")
     args = parser.parse_args()
 
-    dataset_directory = Client(args.dir)
-    annotator = Annotator()
+    annotator = Annotator(args.dir)
     annotator.pred()
