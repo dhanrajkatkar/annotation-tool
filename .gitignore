@@ -5,7 +5,7 @@ __pycache__/
 
 # C extensions
 *.so
-
+sort_tracker/model/*.*
 # Distribution / packaging
 .Python
 build/
